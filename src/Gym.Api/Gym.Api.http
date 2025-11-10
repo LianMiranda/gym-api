@@ -1,6 +1,6 @@
-@gym.api_HostAddress = http://localhost:5151
+@host = http://localhost:5084
 
-GET {{gym.api_HostAddress}}/weatherforecast/
+GET {{host}}/
 Accept: application/json
 
 ###
