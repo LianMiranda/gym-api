@@ -9,6 +9,8 @@ public class User : Entity
     public bool IsActive { get; private set; }
     
     public List<BodyMeasurement> BodyMeasurements { get; private set; }
+    public List<WorkoutPlan> WorkoutPlans { get; private set; }
+    public List<WorkoutSession> WorkoutSessions { get; private set; }
 
     public User(string firstName, string lastName, string email, string passwordHash)
     {
@@ -17,10 +19,10 @@ public class User : Entity
         ArgumentException.ThrowIfNullOrWhiteSpace(email);
         ArgumentException.ThrowIfNullOrWhiteSpace(passwordHash);
         
-        FirstName = firstName;
-        LastName = lastName;
-        Email = email;
-        PasswordHash = passwordHash;
+        FirstName = firstName.Trim();
+        LastName = lastName.Trim();
+        Email = email.Trim();
+        PasswordHash = passwordHash.Trim();
         IsActive = true;
     }
 
@@ -28,7 +30,7 @@ public class User : Entity
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(newFirstName);
 
-        this.FirstName = newFirstName;
+        this.FirstName = newFirstName.Trim();
         RefreshUpdatedAt();
     }
 
@@ -36,7 +38,7 @@ public class User : Entity
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(newLastName);
 
-        this.LastName = newLastName;
+        this.LastName = newLastName.Trim();
         RefreshUpdatedAt();
     }
 
@@ -44,7 +46,7 @@ public class User : Entity
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(newEmail);
 
-        this.Email = newEmail;
+        this.Email = newEmail.Trim();
         RefreshUpdatedAt();
     }
     
@@ -52,7 +54,7 @@ public class User : Entity
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(newPasswordHash);
 
-        this.PasswordHash = newPasswordHash;
+        this.PasswordHash = newPasswordHash.Trim();
         RefreshUpdatedAt();
     }
 
