@@ -9,7 +9,7 @@ public class ExerciseMap : IEntityTypeConfiguration<Exercise>
     public void Configure(EntityTypeBuilder<Exercise> builder)
     {
         builder
-            .ToTable("exercise");
+            .ToTable("exercises");
 
         builder
             .HasKey(e => e.Id);

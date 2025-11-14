@@ -102,6 +102,7 @@ public class BodyMeasurementMap : IEntityTypeConfiguration<BodyMeasurement>
         builder
             .HasOne(b => b.User)
             .WithMany(u => u.BodyMeasurements)
-            .HasForeignKey(b => b.UserId);
+            .HasForeignKey(b => b.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

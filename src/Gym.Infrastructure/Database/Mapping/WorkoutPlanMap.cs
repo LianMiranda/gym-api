@@ -9,7 +9,7 @@ public class WorkoutPlanMap : IEntityTypeConfiguration<WorkoutPlan>
     public void Configure(EntityTypeBuilder<WorkoutPlan> builder)
     {
         builder
-            .ToTable("workout_plan");
+            .ToTable("workout_plans");
 
         builder
             .HasKey(w => w.Id);
@@ -58,10 +58,25 @@ public class WorkoutPlanMap : IEntityTypeConfiguration<WorkoutPlan>
             .HasConversion<string>()
             .HasColumnType("varchar")
             .HasMaxLength(15);
+        
+        builder
+            .Property(u => u.CreatedAt)
+            .IsRequired(true)
+            .HasDefaultValue(DateTime.UtcNow)
+            .HasColumnName("created_at")
+            .HasColumnType("datetime2");
+
+        builder
+            .Property(u => u.UpdatedAt)
+            .IsRequired(true)
+            .HasDefaultValue(DateTime.UtcNow)
+            .HasColumnName("updated_at")
+            .HasColumnType("datetime2");
 
         builder
             .HasOne(w => w.User)
             .WithMany(u => u.WorkoutPlans)
-            .HasForeignKey(w => w.UserId);
+            .HasForeignKey(w => w.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

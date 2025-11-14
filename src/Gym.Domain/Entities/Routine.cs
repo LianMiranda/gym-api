@@ -8,7 +8,7 @@ public class Routine : Entity
     public string? ImageUrl { get; private set; }
     public int OrderIndex { get; private set; }
     
-    public WorkoutPlan? WorkoutPlan { get; private set; }
+    public WorkoutPlan WorkoutPlan { get; private set; }
     public List<RoutineExercise> RoutineExercises { get; private set; }
     public List<WorkoutSession> WorkoutSessions { get; private set; }
 
