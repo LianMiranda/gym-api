@@ -7,27 +7,31 @@ public class WorkoutPlan : Entity
     public Guid UserId { get; private set; }
     public string Name { get; private set; }
     public string? Description { get; private set; }
-    public int DaysPerWeek { get; private set; }
-    public DateOnly StartDate { get; private set; }
-    public DateOnly EndDate { get; private set; }
+    public sbyte? DaysPerWeek { get; private set; }
+    public sbyte? Months { get; private set; }
     public Goal Goal { get; set; }
 
     public User User { get; private set; }
-    public List<Routine> Routines { get; set; }
+    public List<Routine> Routines { get; private set; }
 
-    public WorkoutPlan(Guid userId, string name, string? description, int daysPerWeek, DateOnly startDate,
-        DateOnly endDate, Goal goal)
+    public WorkoutPlan(Guid userId, string name, string? description, sbyte? daysPerWeek, sbyte? months, Goal goal)
     {
         if (userId == Guid.Empty) throw new ArgumentException("UserId cannot be empty", nameof(userId));
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentException.ThrowIfNullOrWhiteSpace(description);
-        if (daysPerWeek <= 0 || daysPerWeek > 7)
-            throw new ArgumentOutOfRangeException(nameof(daysPerWeek),
-                "The number of days per week should be between 1 and 7.");
-        if (startDate < DateOnly.FromDateTime(DateTime.Today))
-            throw new ArgumentException("The start date cannot be earlier than today.", nameof(startDate));
-        if (endDate <= StartDate)
-            throw new ArgumentException("The end date must be later than the start date.", nameof(endDate));
+        if (daysPerWeek.HasValue)
+        {
+            if (daysPerWeek <= 0 || daysPerWeek > 7)
+                throw new ArgumentOutOfRangeException(nameof(daysPerWeek),
+                    "The number of days per week should be between 1 and 7.");
+        }
+
+        if (months.HasValue)
+        {
+            if (months < 0)
+                throw new ArgumentException("The number of months cannot be negative.", nameof(months));
+        }
+
         if (!Enum.IsDefined(typeof(Goal), goal))
             throw new ArgumentException("Invalid goal.", nameof(goal));
 
@@ -35,8 +39,7 @@ public class WorkoutPlan : Entity
         Name = name.Trim();
         Description = description.Trim();
         DaysPerWeek = daysPerWeek;
-        StartDate = startDate;
-        EndDate = endDate;
+        Months = months;
         Goal = goal;
     }
 
@@ -56,7 +59,7 @@ public class WorkoutPlan : Entity
         RefreshUpdatedAt();
     }
 
-    public void UpdateDaysPerWeek(int newDaysPerWeek)
+    public void UpdateDaysPerWeek(sbyte newDaysPerWeek)
     {
         if (newDaysPerWeek <= 0 || newDaysPerWeek > 7)
             throw new ArgumentOutOfRangeException(nameof(newDaysPerWeek),
@@ -67,26 +70,16 @@ public class WorkoutPlan : Entity
         RefreshUpdatedAt();
     }
 
-    public void UpdateStartDate(DateOnly newStartDate)
+    public void UpdateMonths(sbyte newMonths)
     {
-        if (newStartDate < DateOnly.FromDateTime(DateTime.Today))
-            throw new ArgumentException("The start date cannot be earlier than today.", nameof(newStartDate));
+        if (newMonths < 0)
+            throw new ArgumentException("The number of months cannot be negative.", nameof(newMonths));
 
-        this.StartDate = newStartDate;
+        this.Months = newMonths;
 
         RefreshUpdatedAt();
     }
 
-    public void UpdateEndDate(DateOnly newEndDate)
-    {
-        if (newEndDate <= this.StartDate)
-            throw new ArgumentException("The end date must be later than the start date.", nameof(newEndDate));
-
-        this.EndDate = newEndDate;
-
-        RefreshUpdatedAt();
-    }
-    
     public void UpdateGoal(Goal newGoal)
     {
         if (!Enum.IsDefined(typeof(Goal), newGoal))
