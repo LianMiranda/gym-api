@@ -89,14 +89,14 @@ public class BodyMeasurementMap : IEntityTypeConfiguration<BodyMeasurement>
             .Property(b => b.CreatedAt)
             .IsRequired(true)
             .HasDefaultValue(DateTime.UtcNow)
-            .HasColumnName("created-at")
+            .HasColumnName("created_at")
             .HasColumnType("datetime2");
 
         builder
             .Property(b => b.UpdatedAt)
             .IsRequired(true)
             .HasDefaultValue(DateTime.UtcNow)
-            .HasColumnName("updated-at")
+            .HasColumnName("updated_at")
             .HasColumnType("datetime2");
 
         builder

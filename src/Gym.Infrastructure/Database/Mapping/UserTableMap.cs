@@ -64,14 +64,14 @@ public class UserTableMap : IEntityTypeConfiguration<User>
             .Property(u => u.CreatedAt)
             .IsRequired(true)
             .HasDefaultValue(DateTime.UtcNow)
-            .HasColumnName("created-at")
+            .HasColumnName("created_at")
             .HasColumnType("datetime2");
         
         builder
             .Property(u => u.UpdatedAt)
             .IsRequired(true)
             .HasDefaultValue(DateTime.UtcNow)
-            .HasColumnName("updated-at")
+            .HasColumnName("updated_at")
             .HasColumnType("datetime2");
 
         builder
