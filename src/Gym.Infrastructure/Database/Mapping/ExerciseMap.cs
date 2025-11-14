@@ -36,25 +36,33 @@ public class ExerciseMap : IEntityTypeConfiguration<Exercise>
             .Property(e => e.Category)
             .IsRequired(true)
             .HasColumnName("cateogry")
-            .HasColumnType("smallint");
+            .HasConversion<string>()
+            .HasColumnType("varchar")
+            .HasMaxLength(15);
 
         builder
             .Property(e => e.MuscleGroup)
             .IsRequired(true)
             .HasColumnName("muscle_group")
-            .HasColumnType("smallint");
-        
+            .HasConversion<string>()
+            .HasColumnType("varchar")
+            .HasMaxLength(15);
+
         builder
             .Property(e => e.Equipment)
             .IsRequired(true)
             .HasColumnName("equipment")
-            .HasColumnType("smallint");
+            .HasConversion<string>()
+            .HasColumnType("varchar")
+            .HasMaxLength(15);
 
         builder
             .Property(e => e.DifficultyLevel)
             .IsRequired(true)
             .HasColumnName("difficulty_level")
-            .HasColumnType("smallint");
+            .HasConversion<string>()
+            .HasColumnType("varchar")
+            .HasMaxLength(15);
 
         builder
             .Property(e => e.ImageUrl)
