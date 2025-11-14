@@ -1,13 +1,13 @@
 namespace Gym.Domain.Enums.Exercise_Enums;
 
-public enum ExerciseCategory
+public enum ExerciseCategory : short
 {
-    Strength,
-    Cardio,
-    Flexibility,
-    Balance,
-    Plyometrics,
-    Powerlifting,
-    Stretching,
-    Olympic
+    Strength = 0,
+    Cardio = 1,
+    Flexibility = 2,
+    Balance = 3,
+    Plyometrics = 4,
+    Powerlifting = 5,
+    Stretching = 6,
+    Olympic = 7
 }

@@ -1,35 +1,29 @@
 using System.ComponentModel;
 
 namespace Gym.Domain.Enums;
-public enum Goal
+
+public enum Goal : short
 {
     [Description("Ganho de Massa Muscular")]
-    MuscleGain,
+    MuscleGain = 0,
 
-    [Description("Perda de Gordura")]
-    FatLoss,
+    [Description("Perda de Gordura")] FatLoss = 1,
 
-    [Description("Força Máxima")]
-    Strength,
+    [Description("Força Máxima")] Strength = 2,
 
-    [Description("Resistência Muscular")]
-    Endurance,
+    [Description("Resistência Muscular")] Endurance = 3,
 
-    [Description("Manutenção Física")]
-    Maintenance,
+    [Description("Manutenção Física")] Maintenance = 4,
 
-    [Description("Recomposição Corporal")]
-    BodyRecomposition,
+    [Description("Recomposição Corporal")] BodyRecomposition = 5,
 
     [Description("Powerbuilding (Força + Estética)")]
-    Powerbuilding,
+    Powerbuilding = 6,
 
-    [Description("Desempenho Atlético")]
-    Performance,
+    [Description("Desempenho Atlético")] Performance = 7,
 
     [Description("Reabilitação / Recuperação")]
-    Rehabilitation,
+    Rehabilitation = 8,
 
-    [Description("Condicionamento Geral")]
-    GeneralFitness
+    [Description("Condicionamento Geral")] GeneralFitness = 9
 }

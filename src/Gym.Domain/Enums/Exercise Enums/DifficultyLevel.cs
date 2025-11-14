@@ -1,9 +1,9 @@
 namespace Gym.Domain.Enums.Exercise_Enums;
 
-public enum DifficultyLevel
+public enum DifficultyLevel : short
 {
-    Beginner = 1,
-    Intermediate = 2,
-    Advanced = 3,
-    Expert = 4
+    Beginner = 0,
+    Intermediate = 1,
+    Advanced = 2,
+    Expert = 3
 }
