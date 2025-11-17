@@ -62,14 +62,14 @@ public class WorkoutPlanMap : IEntityTypeConfiguration<WorkoutPlan>
         builder
             .Property(u => u.CreatedAt)
             .IsRequired(true)
-            .HasDefaultValue("GETUTCDATE()")
+            .HasDefaultValueSql("GETUTCDATE()")
             .HasColumnName("created_at")
             .HasColumnType("datetime2");
 
         builder
             .Property(u => u.UpdatedAt)
             .IsRequired(true)
-            .HasDefaultValue("GETUTCDATE()")
+            .HasDefaultValueSql("GETUTCDATE()")
             .HasColumnName("updated_at")
             .HasColumnType("datetime2");
 

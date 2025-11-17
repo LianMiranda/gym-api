@@ -47,14 +47,14 @@ public class RoutineExerciseMap : IEntityTypeConfiguration<RoutineExercise>
         builder
             .Property(r => r.CreatedAt)
             .IsRequired(true)
-            .HasDefaultValue("GETUTCDATE()")
+            .HasDefaultValueSql("GETUTCDATE()")
             .HasColumnType("datetime2")
             .HasColumnName("created_at");
         
         builder
             .Property(r => r.UpdatedAt)
             .IsRequired(true)
-            .HasDefaultValue("GETUTCDATE()")
+            .HasDefaultValueSql("GETUTCDATE()")
             .HasColumnType("datetime2")
             .HasColumnName("updated_at");
 
