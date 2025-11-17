@@ -54,14 +54,14 @@ public class RoutineMap : IEntityTypeConfiguration<Routine>
         builder
             .Property(r => r.CreatedAt)
             .IsRequired(true)
-            .HasDefaultValue(DateTime.UtcNow)
+            .HasDefaultValue("GETUTCDATE()")
             .HasColumnName("created_at")
             .HasColumnType("datetime2");
 
         builder
             .Property(r => r.UpdatedAt)
             .IsRequired(true)
-            .HasDefaultValue(DateTime.UtcNow)
+            .HasDefaultValue("GETUTCDATE()")
             .HasColumnName("updated_at")
             .HasColumnType("datetime2");
 

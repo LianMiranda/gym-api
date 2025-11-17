@@ -88,14 +88,14 @@ public class BodyMeasurementMap : IEntityTypeConfiguration<BodyMeasurement>
         builder
             .Property(b => b.CreatedAt)
             .IsRequired(true)
-            .HasDefaultValue(DateTime.UtcNow)
+            .HasDefaultValue("GETUTCDATE()")
             .HasColumnName("created_at")
             .HasColumnType("datetime2");
 
         builder
             .Property(b => b.UpdatedAt)
             .IsRequired(true)
-            .HasDefaultValue(DateTime.UtcNow)
+            .HasDefaultValue("GETUTCDATE()")
             .HasColumnName("updated_at")
             .HasColumnType("datetime2");
 

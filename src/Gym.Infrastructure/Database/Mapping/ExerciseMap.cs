@@ -85,14 +85,14 @@ public class ExerciseMap : IEntityTypeConfiguration<Exercise>
         builder
             .Property(u => u.CreatedAt)
             .IsRequired(true)
-            .HasDefaultValue(DateTime.UtcNow)
+            .HasDefaultValue("GETUTCDATE()")
             .HasColumnName("created_at")
             .HasColumnType("datetime2");
 
         builder
             .Property(u => u.UpdatedAt)
             .IsRequired(true)
-            .HasDefaultValue(DateTime.UtcNow)
+            .HasDefaultValue("GETUTCDATE()")
             .HasColumnName("updated_at")
             .HasColumnType("datetime2");
     }

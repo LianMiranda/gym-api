@@ -53,14 +53,14 @@ public class WorkoutSessionMap : IEntityTypeConfiguration<WorkoutSession>
         builder
             .Property(w => w.CreatedAt)
             .IsRequired(true)
-            .HasDefaultValue(DateTime.UtcNow)
+            .HasDefaultValue("GETUTCDATE()")
             .HasColumnName("created_at")
             .HasColumnType("datetime2");
 
         builder
             .Property(w => w.UpdatedAt)
             .IsRequired(true)
-            .HasDefaultValue(DateTime.UtcNow)
+            .HasDefaultValue("GETUTCDATE()")
             .HasColumnName("updated_at")
             .HasColumnType("datetime2");
 
