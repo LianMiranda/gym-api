@@ -13,6 +13,8 @@ public class Exercise : Entity
     public string? ImageUrl { get; private set; }
     public string? VideoUrl { get; private set; }
     public string? ExternalApiId { get; private set; }
+    
+    public List<RoutineExercise> RoutineExercises { get; private set; }
 
     public Exercise(string name, string description, ExerciseCategory category, MuscleGroup muscleGroup,
         Equipment equipment, DifficultyLevel difficultyLevel, string? imageUrl, string? videoUrl, string? externalApiId)
