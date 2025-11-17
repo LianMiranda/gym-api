@@ -9,12 +9,12 @@ public class WorkoutPlan : Entity
     public string? Description { get; private set; }
     public sbyte? DaysPerWeek { get; private set; }
     public sbyte? Months { get; private set; }
-    public Goal Goal { get; set; }
+    public Goal? Goal { get; set; }
 
     public User User { get; private set; }
     public List<Routine> Routines { get; private set; }
 
-    public WorkoutPlan(Guid userId, string name, string? description, sbyte? daysPerWeek, sbyte? months, Goal goal)
+    public WorkoutPlan(Guid userId, string name, string? description, sbyte? daysPerWeek, sbyte? months, Goal? goal)
     {
         if (userId == Guid.Empty) throw new ArgumentException("UserId cannot be empty", nameof(userId));
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
@@ -25,15 +25,16 @@ public class WorkoutPlan : Entity
                 throw new ArgumentOutOfRangeException(nameof(daysPerWeek),
                     "The number of days per week should be between 1 and 7.");
         }
-
         if (months.HasValue)
         {
             if (months < 0)
                 throw new ArgumentException("The number of months cannot be negative.", nameof(months));
         }
-
-        if (!Enum.IsDefined(typeof(Goal), goal))
-            throw new ArgumentException("Invalid goal.", nameof(goal));
+        if (goal.HasValue)
+        {
+            if (!Enum.IsDefined(typeof(Goal), goal))
+                throw new ArgumentException("Invalid goal.", nameof(goal));
+        }
 
         UserId = userId;
         Name = name.Trim();

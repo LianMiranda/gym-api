@@ -8,14 +8,14 @@ public class ExerciseSet : Entity
     public int SetNumber { get; private set; }
     public int Reps { get; private set; }
     public decimal Weight { get; private set; }
-    public short RestTimeSeconds { get; private set; }
+    public short? RestTimeSeconds { get; private set; }
     public bool Completed { get; private set; }
     public SetType Type { get; private set; }
     public double? Rpe { get; private set; }
 
     public RoutineExercise RoutineExercise { get; set; }
 
-    public ExerciseSet(Guid routineExerciseId, int setNumber, int reps, decimal weight, short restTimeSeconds,
+    public ExerciseSet(Guid routineExerciseId, int setNumber, int reps, decimal weight, short? restTimeSeconds,
         bool completed, SetType type, double? rpe)
     {
         if (routineExerciseId == Guid.Empty)

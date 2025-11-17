@@ -42,7 +42,7 @@ public class RoutineMap : IEntityTypeConfiguration<Routine>
         builder
             .Property(r => r.ImageUrl)
             .IsRequired(false)
-            .HasColumnName("description")
+            .HasColumnName("image_url")
             .HasColumnType("text");
         
         builder
