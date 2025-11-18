@@ -38,4 +38,14 @@ public class UserRepository : IUserRepository
     {
         return await _context.Users.AsNoTracking().ToListAsync();
     }
+
+    public async Task<bool> EmailExistsAsync(string email)
+    {
+        var user = await _context.Users.AsNoTracking().SingleOrDefaultAsync(user => user.Email == email);
+
+        if (user == null)
+            return false;
+
+        return true;
+    }
 }
