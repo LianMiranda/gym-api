@@ -1,3 +1,4 @@
+using Gym.Application.Config;
 using Gym.Infrastructure.Config;
 using Gym.Infrastructure.Database;
 using Gym.Infrastructure.Database.Context;
@@ -12,6 +13,7 @@ var connectionString = builder.Configuration.GetConnectionString("DbConnection")
 
 builder.Services.AddDbContext<AppDbContext>(options => { options.UseSqlServer(connectionString, x => x.MigrationsAssembly("Gym.Infrastructure")); });
 builder.Services.AddInfrastructure();
+builder.Services.AddApplication();
 
 var app = builder.Build();
 
@@ -22,7 +24,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
+app.MapControllers();
 app.MapGet("/", () => "Hello World");
 
 app.Run();
