@@ -1,7 +1,7 @@
 using Gym.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Gym.Infrastructure.Database;
+namespace Gym.Infrastructure.Database.Context;
 
 public class AppDbContext : DbContext
 {
