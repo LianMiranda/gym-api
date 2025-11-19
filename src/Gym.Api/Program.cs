@@ -1,13 +1,23 @@
+using Gym.Api.Filters;
 using Gym.Application.Config;
 using Gym.Infrastructure.Config;
-using Gym.Infrastructure.Database;
 using Gym.Infrastructure.Database.Context;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
-builder.Services.AddControllers();
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
+
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidationResultFilter>();
+});
 
 var connectionString = builder.Configuration.GetConnectionString("DbConnection");
 
