@@ -1,4 +1,4 @@
-namespace Gym.Application.Dtos.User;
+namespace Gym.Application.Dtos.User.Response;
 
 public class UserResponse
 {

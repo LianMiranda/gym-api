@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace Gym.Application.Dtos.User;
+namespace Gym.Application.Dtos.User.Request;
 
 public record CreateUserRequest
 {

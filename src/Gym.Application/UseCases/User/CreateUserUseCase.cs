@@ -1,4 +1,5 @@
-using Gym.Application.Dtos.User;
+using Gym.Application.Dtos.User.Request;
+using Gym.Application.Dtos.User.Response;
 using Gym.Application.MappingImplementation;
 using Gym.Domain.Abstractions.ResultPattern;
 using Gym.Domain.Interfaces.Repositories;

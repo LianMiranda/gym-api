@@ -1,4 +1,5 @@
-using Gym.Application.Dtos.User;
+using Gym.Application.Dtos.User.Request;
+using Gym.Application.Dtos.User.Response;
 using Gym.Domain.Entities;
 
 namespace Gym.Application.MappingImplementation;
