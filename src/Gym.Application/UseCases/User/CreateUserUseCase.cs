@@ -30,11 +30,11 @@ public class CreateUserUseCase
 
         var entity = user.MapToEntity(passwordHash);
 
-        await _userRepository.SaveAsync(entity);
+        await _userRepository.CreateAsync(entity);
         await _unitOfWork.SaveAsync();
 
         var response = entity.MapToDto();
-        
+
         return response;
     }
 }

@@ -4,7 +4,7 @@ namespace Gym.Domain.Interfaces.Repositories;
 
 public interface IUserRepository
 {
-    Task SaveAsync(User user);
+    Task CreateAsync(User user);
     void Delete(User user);
     void Update(User user);
     Task<User?> GetByIdAsync(Guid id);
