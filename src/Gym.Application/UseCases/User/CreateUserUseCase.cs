@@ -1,5 +1,6 @@
 using Gym.Application.Dtos.User;
 using Gym.Application.MappingImplementation;
+using Gym.Domain.Abstractions.ResultPattern;
 using Gym.Domain.Interfaces.Repositories;
 using Gym.Domain.Interfaces.Shared;
 using Gym.Domain.Interfaces.UnitOfWork;
@@ -19,12 +20,12 @@ public class CreateUserUseCase
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<UserResponse> ExecuteAsync(CreateUserRequest user)
+    public async Task<ResultData<UserResponse>> ExecuteAsync(CreateUserRequest user)
     {
         var emailExists = await _userRepository.EmailExistsAsync(user.Email);
 
         if (emailExists)
-            throw new InvalidOperationException("Email already exists");
+            return ResultData<UserResponse>.Error("Email already exists");
 
         string passwordHash = _passwordHasher.Hash(user.Password);
 
@@ -35,6 +36,6 @@ public class CreateUserUseCase
 
         var response = entity.MapToDto();
 
-        return response;
+        return response.ToSuccessResult();
     }
 }

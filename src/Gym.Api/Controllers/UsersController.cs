@@ -22,10 +22,8 @@ public class UsersController : ControllerBase
         {
             var user = await _createUserUseCase.ExecuteAsync(request);
 
-            if (user == null)
-            {
-                return BadRequest("TA NULO");
-            }
+            if (!user.IsSuccess)
+                return Conflict(user);
 
             return Ok(user);
         }
