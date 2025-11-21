@@ -11,15 +11,17 @@ public class UsersController : ControllerBase
     private readonly CreateUserUseCase _createUserUseCase;
     private readonly GetAllUsersUseCase _getAllUsersUseCase;
     private readonly DeleteUserUseCase _deleteUserUseCase;
+    private readonly UpdateUserUseCase _updateUserUseCase;
     private readonly ILogger<UsersController> _logger;
 
     public UsersController(CreateUserUseCase createUserUseCase, GetAllUsersUseCase getAllUsersUseCase,
-        DeleteUserUseCase deleteUserUseCase, ILogger<UsersController> logger)
+        DeleteUserUseCase deleteUserUseCase, ILogger<UsersController> logger, UpdateUserUseCase updateUserUseCase)
     {
         _createUserUseCase = createUserUseCase;
         _getAllUsersUseCase = getAllUsersUseCase;
         _deleteUserUseCase = deleteUserUseCase;
         _logger = logger;
+        _updateUserUseCase = updateUserUseCase;
     }
 
     [HttpPost]
@@ -66,6 +68,7 @@ public class UsersController : ControllerBase
         }
     }
 
+    //TODO: Adicionar os cancelation tokens
     [Route("{id}")]
     [HttpDelete]
     public async Task<IActionResult> DeleteUserAsync([FromRoute] Guid id)
@@ -82,6 +85,29 @@ public class UsersController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "Unexpected error while deleting user {UserId}", id);
+            return StatusCode(
+                StatusCodes.Status500InternalServerError,
+                new { message = "An unexpected error occurred" }
+            );
+        }
+    }
+    
+    [Route("{id}")]
+    [HttpPatch]
+    public async Task<IActionResult> UpdateUserAsync([FromRoute] Guid id, [FromBody] UpdateUserRequest request)
+    {
+        try
+        {
+            var result = await _updateUserUseCase.ExecuteAsync(id, request);
+
+            if (!result.IsSuccess)
+                return NotFound(result);
+            
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Unexpected error while update user {UserId}", id);
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { message = "An unexpected error occurred" }
