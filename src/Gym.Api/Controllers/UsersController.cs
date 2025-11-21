@@ -103,7 +103,7 @@ public class UsersController : ControllerBase
             if (!result.IsSuccess)
                 return NotFound(result);
             
-            return Ok(result);
+            return NoContent();
         }
         catch (Exception e)
         {
