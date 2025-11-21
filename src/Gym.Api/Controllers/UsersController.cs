@@ -12,16 +12,18 @@ public class UsersController : ControllerBase
     private readonly GetAllUsersUseCase _getAllUsersUseCase;
     private readonly DeleteUserUseCase _deleteUserUseCase;
     private readonly UpdateUserUseCase _updateUserUseCase;
+    private readonly GetUserByIdUseCase _getUserByIdUseCase;
     private readonly ILogger<UsersController> _logger;
 
     public UsersController(CreateUserUseCase createUserUseCase, GetAllUsersUseCase getAllUsersUseCase,
-        DeleteUserUseCase deleteUserUseCase, ILogger<UsersController> logger, UpdateUserUseCase updateUserUseCase)
+        DeleteUserUseCase deleteUserUseCase, ILogger<UsersController> logger, UpdateUserUseCase updateUserUseCase, GetUserByIdUseCase getUserByIdUseCase)
     {
         _createUserUseCase = createUserUseCase;
         _getAllUsersUseCase = getAllUsersUseCase;
         _deleteUserUseCase = deleteUserUseCase;
         _logger = logger;
         _updateUserUseCase = updateUserUseCase;
+        _getUserByIdUseCase = getUserByIdUseCase;
     }
 
     [HttpPost]
@@ -61,6 +63,29 @@ public class UsersController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "Unexpected error while searching for users.");
+            return StatusCode(
+                StatusCodes.Status500InternalServerError,
+                new { message = "An unexpected error occurred" }
+            );
+        }
+    }
+    
+    [Route("{id}")]
+    [HttpGet]
+    public async Task<IActionResult> GetUserByIdAsync([FromRoute] Guid id)
+    {
+        try
+        {
+            var result = await _getUserByIdUseCase.ExecuteAsync(id);
+
+            if (!result.IsSuccess)
+                return NotFound(result);
+            
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Unexpected error while searching for user {UserId}", id);
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { message = "An unexpected error occurred" }

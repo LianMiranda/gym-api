@@ -1,6 +1,6 @@
 namespace Gym.Application.Dtos.User.Response;
 
-public class UserResponse
+public record UserResponse
 {
     public Guid Id { get; set; }
     public string FirstName { get; set; } = null!;
