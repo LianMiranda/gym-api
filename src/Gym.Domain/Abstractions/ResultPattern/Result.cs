@@ -1,16 +1,25 @@
 namespace Gym.Domain.Abstractions.ResultPattern;
 
-public abstract class Result
+public class Result<T> : BaseResult
 {
-    public bool IsSuccess { get; private set; }
-    public string Message { get; private set; }
+    public T? Data { get; private set; }
 
-    protected Result(bool isSuccess, string message)
+    public Result(T? data, bool isSuccess = true, string message = "") : base(isSuccess, message)
     {
-        if (!isSuccess && string.IsNullOrWhiteSpace(message))
-            throw new ArgumentException("The error should have a message.", nameof(message));
-        
-        IsSuccess = isSuccess;
-        Message = message;
+        Data = data;
     }
+
+    public static Result<T> Success(T data) => new(data);
+    public static Result<T> Error(string message) => new(default, false, message);
+}
+
+//Result without data
+public class Result : Result<object>
+{
+    public Result(bool isSuccess, string message) : base(null, isSuccess, message)
+    {
+    }
+
+    public static Result Success(string message = "") => new(true, message);
+    public static Result Error(string message) => new(false, message);
 }
