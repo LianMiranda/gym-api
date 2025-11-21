@@ -11,15 +11,15 @@ public class ValidationResultFilter : IActionFilter
         if (!context.ModelState.IsValid)
         {
             var errors = context.ModelState
-                .Where(x => x.Value.Errors.Count > 0)
+                .Where(x => x.Value!.Errors.Count > 0)
                 .ToDictionary(
                     kvp => kvp.Key,
-                    kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                    kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage).ToArray()
                 );
 
             var message = string.Join("; ", errors.SelectMany(e => e.Value));
 
-            var result = ResultData<object>.Error(message);
+            var result = Result.Error(message);
 
             context.Result = new BadRequestObjectResult(result);
         }

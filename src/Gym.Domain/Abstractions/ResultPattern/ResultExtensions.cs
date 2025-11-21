@@ -2,8 +2,8 @@ namespace Gym.Domain.Abstractions.ResultPattern;
 
 public static class ResultExtensions
 {
-    public static ResultData<T> ToSuccessResult<T>(this T data)
+    public static Result<T> ToSuccessResult<T>(this T data)
     {
-        return ResultData<T>.Success(data);
+        return Result<T>.Success(data);
     }
 }

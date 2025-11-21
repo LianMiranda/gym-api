@@ -15,16 +15,16 @@ public class DeleteUserUseCase
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<ResultData<string>> ExecuteAsync(Guid id)
+    public async Task<Result> ExecuteAsync(Guid id)
     {
         var userExists = await _userRepository.GetByIdAsync(id);
 
         if (userExists == null)
-            return ResultData<string>.Error("User not found");
+            return Result.Error("User not found");
 
         _userRepository.Delete(userExists);
         await _unitOfWork.SaveAsync();
 
-        return ResultData<string>.Success("User deleted successfully");
+        return Result.Success();
     }
 }

@@ -21,12 +21,12 @@ public class CreateUserUseCase
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<ResultData<UserResponse>> ExecuteAsync(CreateUserRequest user)
+    public async Task<Result<UserResponse>> ExecuteAsync(CreateUserRequest user)
     {
         var emailExists = await _userRepository.EmailExistsAsync(user.Email);
 
         if (emailExists)
-            return ResultData<UserResponse>.Error("Email already exists");
+            return Result<UserResponse>.Error("Email already exists");
 
         string passwordHash = _passwordHasher.Hash(user.Password);
 

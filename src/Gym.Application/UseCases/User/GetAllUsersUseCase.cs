@@ -17,7 +17,7 @@ public class GetAllUsersUseCase
         _repository = repository;
     }
 
-    public async Task<ResultData<PagedUsersResponse>> ExecuteAsync(int page, int take)
+    public async Task<Result<PagedUsersResponse>> ExecuteAsync(int page, int take)
     {
         var result = await _repository.GetAllAsync(page, take);
 
@@ -26,7 +26,7 @@ public class GetAllUsersUseCase
         var pageSize = result.pageSize;
 
         if (result.users == null || !result.users.Any())
-            return ResultData<PagedUsersResponse>.Error(
+            return Result<PagedUsersResponse>.Error(
                 page == 1
                     ? "No users found"
                     : "No users found for the requested page"
@@ -43,6 +43,6 @@ public class GetAllUsersUseCase
             PageSize = pageSize
         };
 
-        return ResultData<PagedUsersResponse>.Success(response);
+        return response.ToSuccessResult();
     }
 }

@@ -17,12 +17,12 @@ public class UpdateUserUseCase
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<ResultData<UpdateUserResponse>> ExecuteAsync(Guid id, UpdateUserRequest request)
+    public async Task<Result> ExecuteAsync(Guid id, UpdateUserRequest request)
     {
         var result = await _userRepository.GetByIdAsync(id);
 
         if (result == null)
-            return ResultData<UpdateUserResponse>.Error("User not found");
+            return Result.Error("User not found");
 
         if (!string.IsNullOrWhiteSpace(request.FirstName)) result.UpdateFirstName(request.FirstName);
         if (!string.IsNullOrWhiteSpace(request.LastName)) result.UpdateLastName(request.LastName);
@@ -32,11 +32,6 @@ public class UpdateUserUseCase
         _userRepository.Update(result);
         await _unitOfWork.SaveAsync();
 
-        var response = new UpdateUserResponse
-        {
-            Message = "User updated successfully."
-        };
-
-        return ResultData<UpdateUserResponse>.Success(response);
+        return Result.Success();
     }
 }
