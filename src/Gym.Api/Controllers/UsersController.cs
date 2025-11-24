@@ -1,37 +1,20 @@
 using Gym.Application.Dtos.User.Request;
-using Gym.Application.UseCases.User;
+using Gym.Application.Services.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gym.Api.Controllers;
 
 [Route("api/users")]
 [ApiController]
-public class UsersController : ControllerBase
+public class UsersController(ILogger<UsersController> logger, IUserService service) : ControllerBase
 {
-    private readonly CreateUserUseCase _createUserUseCase;
-    private readonly GetAllUsersUseCase _getAllUsersUseCase;
-    private readonly DeleteUserUseCase _deleteUserUseCase;
-    private readonly UpdateUserUseCase _updateUserUseCase;
-    private readonly GetUserByIdUseCase _getUserByIdUseCase;
-    private readonly ILogger<UsersController> _logger;
-
-    public UsersController(CreateUserUseCase createUserUseCase, GetAllUsersUseCase getAllUsersUseCase,
-        DeleteUserUseCase deleteUserUseCase, ILogger<UsersController> logger, UpdateUserUseCase updateUserUseCase, GetUserByIdUseCase getUserByIdUseCase)
-    {
-        _createUserUseCase = createUserUseCase;
-        _getAllUsersUseCase = getAllUsersUseCase;
-        _deleteUserUseCase = deleteUserUseCase;
-        _logger = logger;
-        _updateUserUseCase = updateUserUseCase;
-        _getUserByIdUseCase = getUserByIdUseCase;
-    }
-
     [HttpPost]
-    public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserRequest request)
+    public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserRequest request,
+        CancellationToken cancellationToken = default)
     {
         try
         {
-            var user = await _createUserUseCase.ExecuteAsync(request);
+            var user = await service.CreateAsync(request, cancellationToken);
 
             if (!user.IsSuccess)
                 return Conflict(user);
@@ -40,7 +23,7 @@ public class UsersController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Unexpected error while creating user.");
+            logger.LogError(e, "Unexpected error while creating user.");
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { message = "An unexpected error occurred" }
@@ -49,11 +32,12 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllUsersAsync([FromQuery] int page = 1, [FromQuery] int take = 20)
+    public async Task<IActionResult> GetAllUsersAsync([FromQuery] int page = 1, [FromQuery] int take = 20,
+        CancellationToken cancellationToken = default)
     {
         try
         {
-            var user = await _getAllUsersUseCase.ExecuteAsync(page, take);
+            var user = await service.GetAllAsync(page, take, cancellationToken);
 
             if (!user.IsSuccess)
                 return NotFound(user);
@@ -62,30 +46,31 @@ public class UsersController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Unexpected error while searching for users.");
+            logger.LogError(e, "Unexpected error while searching for users.");
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { message = "An unexpected error occurred" }
             );
         }
     }
-    
+
     [Route("{id}")]
     [HttpGet]
-    public async Task<IActionResult> GetUserByIdAsync([FromRoute] Guid id)
+    public async Task<IActionResult> GetUserByIdAsync([FromRoute] Guid id,
+        CancellationToken cancellationToken = default)
     {
         try
         {
-            var result = await _getUserByIdUseCase.ExecuteAsync(id);
+            var result = await service.GetByIdAsync(id, cancellationToken);
 
             if (!result.IsSuccess)
                 return NotFound(result);
-            
+
             return Ok(result);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Unexpected error while searching for user {UserId}", id);
+            logger.LogError(e, "Unexpected error while searching for user {UserId}", id);
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { message = "An unexpected error occurred" }
@@ -93,14 +78,13 @@ public class UsersController : ControllerBase
         }
     }
 
-    //TODO: Adicionar os cancelation tokens
     [Route("{id}")]
     [HttpDelete]
-    public async Task<IActionResult> DeleteUserAsync([FromRoute] Guid id)
+    public async Task<IActionResult> DeleteUserAsync([FromRoute] Guid id, CancellationToken cancellationToken = default)
     {
         try
         {
-            var result = await _deleteUserUseCase.ExecuteAsync(id);
+            var result = await service.DeleteAsync(id, cancellationToken);
 
             if (!result.IsSuccess)
                 return NotFound(result);
@@ -109,30 +93,31 @@ public class UsersController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Unexpected error while deleting user {UserId}", id);
+            logger.LogError(e, "Unexpected error while deleting user {UserId}", id);
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { message = "An unexpected error occurred" }
             );
         }
     }
-    
+
     [Route("{id}")]
     [HttpPatch]
-    public async Task<IActionResult> UpdateUserAsync([FromRoute] Guid id, [FromBody] UpdateUserRequest request)
+    public async Task<IActionResult> UpdateUserAsync([FromRoute] Guid id, [FromBody] UpdateUserRequest request,
+        CancellationToken cancellationToken = default)
     {
         try
         {
-            var result = await _updateUserUseCase.ExecuteAsync(id, request);
+            var result = await service.UpdateAsync(id, request, cancellationToken);
 
             if (!result.IsSuccess)
                 return NotFound(result);
-            
+
             return NoContent();
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Unexpected error while update user {UserId}", id);
+            logger.LogError(e, "Unexpected error while update user {UserId}", id);
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { message = "An unexpected error occurred" }
