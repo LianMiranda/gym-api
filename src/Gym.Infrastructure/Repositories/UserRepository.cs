@@ -33,6 +33,11 @@ public class UserRepository : IUserRepository
     {
         return await _context.Users.AsNoTracking().SingleOrDefaultAsync(user => user.Id == id);
     }
+    
+    public async Task<User?> GetByEmailAsync(string email)
+    {
+        return await _context.Users.AsNoTracking().SingleOrDefaultAsync(user => user.Email == email);
+    }
 
     public async Task<(IEnumerable<User>? users, int totalCount, int page, int pageSize)> GetAllAsync(int page,
         int take)
