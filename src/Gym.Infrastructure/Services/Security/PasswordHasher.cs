@@ -1,6 +1,6 @@
 using Gym.Domain.Interfaces.Shared;
 
-namespace Gym.Infrastructure.Security;
+namespace Gym.Infrastructure.Services.Security;
 
 public class PasswordHasher : IPasswordHasher
 {
