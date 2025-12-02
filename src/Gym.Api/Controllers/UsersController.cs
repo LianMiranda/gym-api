@@ -1,36 +1,16 @@
+using System.Security.Claims;
 using Gym.Application.Dtos.User.Request;
 using Gym.Application.Services.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gym.Api.Controllers;
 
+[Authorize]
 [Route("api/users")]
 [ApiController]
 public class UsersController(ILogger<UsersController> logger, IUserService service) : ControllerBase
 {
-    [HttpPost]
-    public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserRequest request,
-        CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            var user = await service.CreateAsync(request, cancellationToken);
-
-            if (!user.IsSuccess)
-                return Conflict(user);
-
-            return Created("", user);
-        }
-        catch (Exception e)
-        {
-            logger.LogError(e, "Unexpected error while creating user.");
-            return StatusCode(
-                StatusCodes.Status500InternalServerError,
-                new { message = "An unexpected error occurred" }
-            );
-        }
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetAllUsersAsync([FromQuery] int page = 1, [FromQuery] int take = 20,
         CancellationToken cancellationToken = default)
@@ -78,10 +58,11 @@ public class UsersController(ILogger<UsersController> logger, IUserService servi
         }
     }
 
-    [Route("{id}")]
     [HttpDelete]
-    public async Task<IActionResult> DeleteUserAsync([FromRoute] Guid id, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> DeleteCurrentUserAsync(CancellationToken cancellationToken = default)
     {
+        var id  = GetCurrentId();
+        
         try
         {
             var result = await service.DeleteAsync(id, cancellationToken);
@@ -101,11 +82,12 @@ public class UsersController(ILogger<UsersController> logger, IUserService servi
         }
     }
 
-    [Route("{id}")]
     [HttpPatch]
-    public async Task<IActionResult> UpdateUserAsync([FromRoute] Guid id, [FromBody] UpdateUserRequest request,
+    public async Task<IActionResult> UpdateCurrentUserAsync([FromBody] UpdateUserRequest request,
         CancellationToken cancellationToken = default)
     {
+        var id  = GetCurrentId();
+        
         try
         {
             var result = await service.UpdateAsync(id, request, cancellationToken);
@@ -123,5 +105,17 @@ public class UsersController(ILogger<UsersController> logger, IUserService servi
                 new { message = "An unexpected error occurred" }
             );
         }
+    }
+
+    private Guid GetCurrentId()
+    {
+        var claim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+
+        if (!Guid.TryParse(claim?.Value, out var id))
+        {
+            logger.LogWarning("Invalid user ID format in token: {ClaimValue}", claim?.Value);
+        }
+
+        return id;
     }
 }
