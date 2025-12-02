@@ -46,7 +46,7 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
             if (!result.IsSuccess)
                 return Conflict(result);
 
-            return Ok(result);
+            return Created("", result);
         }
         catch (Exception e)
         {
