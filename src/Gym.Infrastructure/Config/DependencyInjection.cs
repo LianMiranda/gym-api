@@ -18,6 +18,7 @@ public static class DependencyInjection
         services.AddTransient<IUnitOfWork, UnitOfWork>();
         services.AddTransient<IPasswordHasher, PasswordHasher>();
         services.AddTransient<ITokenService, TokenService>();
+        services.AddTransient<IBodyMeasurementRepository, BodyMeasurementRepository>();
         return services;
     }
 }
