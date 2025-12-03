@@ -58,6 +58,7 @@ public class UsersController(ILogger<UsersController> logger, IUserService servi
         }
     }
 
+    [Route("me")]
     [HttpDelete]
     public async Task<IActionResult> DeleteCurrentUserAsync(CancellationToken cancellationToken = default)
     {
@@ -82,6 +83,7 @@ public class UsersController(ILogger<UsersController> logger, IUserService servi
         }
     }
 
+    [Route("me")]
     [HttpPatch]
     public async Task<IActionResult> UpdateCurrentUserAsync([FromBody] UpdateUserRequest request,
         CancellationToken cancellationToken = default)

@@ -59,7 +59,7 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
     }
 
     [Authorize]
-    [Route("current")]
+    [Route("me")]
     [HttpGet]
     public async Task<IActionResult> GetCurrentUserAsync([FromServices] IUserService userService,
         CancellationToken cancellationToken = default)
