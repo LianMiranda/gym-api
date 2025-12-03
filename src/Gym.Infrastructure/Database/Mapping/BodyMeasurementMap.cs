@@ -39,11 +39,11 @@ public class BodyMeasurementMap : IEntityTypeConfiguration<BodyMeasurement>
 
         builder.Property(b => b.Height)
             .HasColumnName("height")
-            .HasColumnType("decimal(3,2)");
+            .HasColumnType("decimal(5,2)");
 
         builder.Property(b => b.BodyFat)
             .HasColumnName("body_fat")
-            .HasColumnType("decimal(4,2)");
+            .HasColumnType("decimal(5,2)");
 
         builder.Property(b => b.Chest)
             .HasColumnName("chest")
