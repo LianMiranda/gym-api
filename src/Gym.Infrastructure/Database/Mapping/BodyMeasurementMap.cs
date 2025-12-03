@@ -21,6 +21,13 @@ public class BodyMeasurementMap : IEntityTypeConfiguration<BodyMeasurement>
             .HasColumnName("id");
 
         builder
+            .Property(b => b.Name)
+            .IsRequired(true)
+            .HasColumnName("name")
+            .HasColumnType("varchar")
+            .HasMaxLength(100);
+        
+        builder
             .Property(b => b.MeasurementDate)
             .IsRequired(false)
             .HasColumnName("measurement_date")

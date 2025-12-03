@@ -3,6 +3,7 @@ namespace Gym.Domain.Entities;
 public class BodyMeasurement : Entity
 {
     public Guid UserId { get; private set; }
+    public string Name { get; private set; }
     public DateOnly? MeasurementDate { get; private set; }
     public decimal? Weight { get; private set; }
     public decimal? Height { get; private set; }
@@ -16,10 +17,12 @@ public class BodyMeasurement : Entity
     public string? Notes { get; private set; }
     public User User { get; private set; }
 
-    public BodyMeasurement(Guid userId, DateOnly? measurementDate, decimal? weight, decimal? height, decimal? bodyFat,
+    public BodyMeasurement(Guid userId, string name, DateOnly? measurementDate, decimal? weight, decimal? height,
+        decimal? bodyFat,
         decimal? chest, decimal? waist, decimal? hips, decimal? biceps, decimal? thighs, decimal? calves, string? notes)
     {
         if (userId == Guid.Empty) throw new ArgumentException("UserId cannot be empty", nameof(userId));
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
         if (measurementDate > DateOnly.FromDateTime(DateTime.UtcNow))
             throw new ArgumentException("Measurement date cannot be in the future.", nameof(measurementDate));
         ValidateDecimalValue(weight, nameof(weight));
@@ -32,8 +35,8 @@ public class BodyMeasurement : Entity
         ValidateDecimalValue(thighs, nameof(thighs));
         ValidateDecimalValue(calves, nameof(calves));
 
-
         UserId = userId;
+        Name = name;
         MeasurementDate = measurementDate;
         Weight = weight;
         Height = height;
@@ -45,6 +48,14 @@ public class BodyMeasurement : Entity
         Thighs = thighs;
         Calves = calves;
         Notes = notes?.Trim();
+    }
+
+    public void UpdateName(string newName)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(newName);
+
+        this.Name = newName;
+        RefreshUpdatedAt();
     }
 
     public void UpdateMeasurementDate(DateOnly newMeasurementDate)
