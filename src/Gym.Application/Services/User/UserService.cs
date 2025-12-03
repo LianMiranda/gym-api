@@ -50,7 +50,7 @@ public class UserService(IUserRepository userRepository, IUnitOfWork unitOfWork,
 
         var response = new PagedUsersResponse
         {
-            Users = viewUsers,
+            Response = viewUsers!,
             CurrentPage = currentPage,
             TotalCount = totalCount,
             PageSize = pageSize
