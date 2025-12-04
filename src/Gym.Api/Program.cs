@@ -3,6 +3,7 @@ using Gym.Api.Filters;
 using Gym.Application.Config;
 using Gym.Infrastructure.Config;
 using Gym.Infrastructure.Database.Context;
+using Gym.Infrastructure.Database.Seeds;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -55,6 +56,9 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    
+    var seeder = new ExerciseSeeder(connectionString!);
+    await seeder.SeedExercises();
 }
 
 app.UseHttpsRedirection();
