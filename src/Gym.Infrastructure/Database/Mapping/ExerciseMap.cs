@@ -24,7 +24,8 @@ public class ExerciseMap : IEntityTypeConfiguration<Exercise>
             .Property(e => e.Name)
             .IsRequired(true)
             .HasColumnName("name")
-            .HasColumnType("nvarchar");
+            .HasColumnType("nvarchar")
+            .HasMaxLength(200);
 
         builder
             .Property(e => e.Description)
@@ -35,10 +36,10 @@ public class ExerciseMap : IEntityTypeConfiguration<Exercise>
         builder
             .Property(e => e.Category)
             .IsRequired(true)
-            .HasColumnName("cateogry")
+            .HasColumnName("category")
             .HasConversion<string>()
             .HasColumnType("varchar")
-            .HasMaxLength(15);
+            .HasMaxLength(100);
 
         builder
             .Property(e => e.MuscleGroup)
@@ -46,7 +47,7 @@ public class ExerciseMap : IEntityTypeConfiguration<Exercise>
             .HasColumnName("muscle_group")
             .HasConversion<string>()
             .HasColumnType("varchar")
-            .HasMaxLength(15);
+            .HasMaxLength(100);
 
         builder
             .Property(e => e.Equipment)
@@ -54,7 +55,7 @@ public class ExerciseMap : IEntityTypeConfiguration<Exercise>
             .HasColumnName("equipment")
             .HasConversion<string>()
             .HasColumnType("varchar")
-            .HasMaxLength(15);
+            .HasMaxLength(100);
 
         builder
             .Property(e => e.DifficultyLevel)
@@ -62,7 +63,7 @@ public class ExerciseMap : IEntityTypeConfiguration<Exercise>
             .HasColumnName("difficulty_level")
             .HasConversion<string>()
             .HasColumnType("varchar")
-            .HasMaxLength(15);
+            .HasMaxLength(50);
 
         builder
             .Property(e => e.ImageUrl)
