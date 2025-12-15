@@ -1,7 +1,9 @@
 using Gym.Domain.Interfaces.Repositories;
+using Gym.Domain.Interfaces.Seeds;
 using Gym.Domain.Interfaces.Services;
 using Gym.Domain.Interfaces.Shared;
 using Gym.Domain.Interfaces.UnitOfWork;
+using Gym.Infrastructure.Database.Seeds;
 using Gym.Infrastructure.Repositories;
 using Gym.Infrastructure.Services;
 using Gym.Infrastructure.Services.Security;
@@ -19,6 +21,7 @@ public static class DependencyInjection
         services.AddTransient<IPasswordHasher, PasswordHasher>();
         services.AddTransient<ITokenService, TokenService>();
         services.AddTransient<IBodyMeasurementRepository, BodyMeasurementRepository>();
+        services.AddTransient<IExerciseSeeder, ExerciseSeeder>();
         return services;
     }
 }
