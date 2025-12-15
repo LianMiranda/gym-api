@@ -1,8 +1,6 @@
-version: "3.9"
-
 services:
   mssql:
-    image: mcr.microsoft.com/mssql/server:latest
+    image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: mssql-server
     environment:
       SA_PASSWORD: "J7wxkw>9e&3z"
