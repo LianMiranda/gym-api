@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Gym.Infrastructure.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class AddingTheLastTables : Migration
+    public partial class AddingLatesTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -90,7 +90,7 @@ namespace Gym.Infrastructure.Database.Migrations
             migrationBuilder.AlterColumn<decimal>(
                 name: "height",
                 table: "body_measurements",
-                type: "decimal(3,2)",
+                type: "decimal(5,2)",
                 nullable: true,
                 oldClrType: typeof(decimal),
                 oldType: "decimal(18,0)",
@@ -117,7 +117,7 @@ namespace Gym.Infrastructure.Database.Migrations
             migrationBuilder.AlterColumn<decimal>(
                 name: "body_fat",
                 table: "body_measurements",
-                type: "decimal(4,2)",
+                type: "decimal(5,2)",
                 nullable: true,
                 oldClrType: typeof(decimal),
                 oldType: "decimal(18,0)",
@@ -152,17 +152,25 @@ namespace Gym.Infrastructure.Database.Migrations
                 oldType: "datetime2",
                 oldDefaultValue: new DateTime(2025, 11, 12, 2, 1, 22, 485, DateTimeKind.Utc).AddTicks(3777));
 
+            migrationBuilder.AddColumn<string>(
+                name: "name",
+                table: "body_measurements",
+                type: "varchar(100)",
+                maxLength: 100,
+                nullable: false,
+                defaultValue: "");
+
             migrationBuilder.CreateTable(
                 name: "exercises",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    name = table.Column<string>(type: "nvarchar", nullable: false),
+                    name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     description = table.Column<string>(type: "text", nullable: false),
-                    cateogry = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false),
-                    muscle_group = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false),
-                    equipment = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false),
-                    difficulty_level = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false),
+                    category = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
+                    muscle_group = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
+                    equipment = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
+                    difficulty_level = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     image_url = table.Column<string>(type: "nvarchar", nullable: true),
                     video_url = table.Column<string>(type: "nvarchar", nullable: true),
                     external_api_id = table.Column<string>(type: "nvarchar", nullable: true),
@@ -371,6 +379,10 @@ namespace Gym.Infrastructure.Database.Migrations
             migrationBuilder.DropTable(
                 name: "workout_plans");
 
+            migrationBuilder.DropColumn(
+                name: "name",
+                table: "body_measurements");
+
             migrationBuilder.RenameColumn(
                 name: "updated_at",
                 table: "users",
@@ -453,7 +465,7 @@ namespace Gym.Infrastructure.Database.Migrations
                 type: "decimal(18,0)",
                 nullable: true,
                 oldClrType: typeof(decimal),
-                oldType: "decimal(3,2)",
+                oldType: "decimal(5,2)",
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<decimal>(
@@ -480,7 +492,7 @@ namespace Gym.Infrastructure.Database.Migrations
                 type: "decimal(18,0)",
                 nullable: true,
                 oldClrType: typeof(decimal),
-                oldType: "decimal(4,2)",
+                oldType: "decimal(5,2)",
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<decimal>(

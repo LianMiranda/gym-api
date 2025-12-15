@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Gym.Infrastructure.Data.Migrations
+namespace Gym.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251203021035_StandardizingTheSizeOfDecimalValues")]
-    partial class StandardizingTheSizeOfDecimalValues
+    [Migration("20251215205434_AddingLatesTables")]
+    partial class AddingLatesTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -114,9 +114,9 @@ namespace Gym.Infrastructure.Data.Migrations
 
                     b.Property<string>("Category")
                         .IsRequired()
-                        .HasMaxLength(15)
+                        .HasMaxLength(100)
                         .HasColumnType("varchar")
-                        .HasColumnName("cateogry");
+                        .HasColumnName("category");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -131,13 +131,13 @@ namespace Gym.Infrastructure.Data.Migrations
 
                     b.Property<string>("DifficultyLevel")
                         .IsRequired()
-                        .HasMaxLength(15)
+                        .HasMaxLength(50)
                         .HasColumnType("varchar")
                         .HasColumnName("difficulty_level");
 
                     b.Property<string>("Equipment")
                         .IsRequired()
-                        .HasMaxLength(15)
+                        .HasMaxLength(100)
                         .HasColumnType("varchar")
                         .HasColumnName("equipment");
 
@@ -151,12 +151,13 @@ namespace Gym.Infrastructure.Data.Migrations
 
                     b.Property<string>("MuscleGroup")
                         .IsRequired()
-                        .HasMaxLength(15)
+                        .HasMaxLength(100)
                         .HasColumnType("varchar")
                         .HasColumnName("muscle_group");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(200)
                         .HasColumnType("nvarchar")
                         .HasColumnName("name");
 
