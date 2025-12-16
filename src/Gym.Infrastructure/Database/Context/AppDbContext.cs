@@ -1,7 +1,7 @@
 using Gym.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Gym.Infrastructure.Database;
+namespace Gym.Infrastructure.Database.Context;
 
 public class AppDbContext : DbContext
 {
@@ -11,6 +11,8 @@ public class AppDbContext : DbContext
 
     public DbSet<User> Users { get; private set; } = null!;
     public DbSet<BodyMeasurement> BodyMeasurements { get; private set; } = null!;
+    public DbSet<Exercise> Exercises { get; private set; } = null!;
+    public DbSet<WorkoutPlan> WorkoutPlans { get; private set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

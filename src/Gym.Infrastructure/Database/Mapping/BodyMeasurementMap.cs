@@ -21,64 +21,60 @@ public class BodyMeasurementMap : IEntityTypeConfiguration<BodyMeasurement>
             .HasColumnName("id");
 
         builder
+            .Property(b => b.Name)
+            .IsRequired(true)
+            .HasColumnName("name")
+            .HasColumnType("varchar")
+            .HasMaxLength(100);
+        
+        builder
             .Property(b => b.MeasurementDate)
             .IsRequired(false)
-            .HasDefaultValue(null)
             .HasColumnName("measurement_date")
             .HasColumnType("date");
 
-        builder
-            .Property(b => b.Weight)
-            .IsRequired(false)
+        builder.Property(b => b.Weight)
             .HasColumnName("weight")
-            .HasColumnType("decimal");
+            .HasColumnType("decimal(5,2)");
 
         builder.Property(b => b.Height)
-            .IsRequired(false)
             .HasColumnName("height")
-            .HasColumnType("decimal");
-        
+            .HasColumnType("decimal(5,2)");
+
         builder.Property(b => b.BodyFat)
-            .IsRequired(false)
             .HasColumnName("body_fat")
-            .HasColumnType("decimal");
-        
+            .HasColumnType("decimal(5,2)");
+
         builder.Property(b => b.Chest)
-            .IsRequired(false)
             .HasColumnName("chest")
-            .HasColumnType("decimal");
-        
+            .HasColumnType("decimal(5,2)");
+
         builder.Property(b => b.Waist)
-            .IsRequired(false)
             .HasColumnName("waist")
-            .HasColumnType("decimal");
-        
+            .HasColumnType("decimal(5,2)");
+
         builder.Property(b => b.Hips)
-            .IsRequired(false)
             .HasColumnName("hips")
-            .HasColumnType("decimal");
-        
+            .HasColumnType("decimal(5,2)");
+
         builder.Property(b => b.Biceps)
-            .IsRequired(false)
             .HasColumnName("biceps")
-            .HasColumnType("decimal");
-        
-        builder.Property(b => b.Thighs) 
-            .IsRequired(false)
+            .HasColumnType("decimal(5,2)");
+
+        builder.Property(b => b.Thighs)
             .HasColumnName("thighs")
-            .HasColumnType("decimal");
-        
+            .HasColumnType("decimal(5,2)");
+
         builder.Property(b => b.Calves)
-            .IsRequired(false)
             .HasColumnName("calves")
-            .HasColumnType("decimal");
-        
+            .HasColumnType("decimal(5,2)");
+
         builder
             .Property(b => b.Notes)
             .IsRequired(false)
             .HasColumnName("notes")
             .HasColumnType("text");
-        
+
         builder
             .Property(b => b.UserId)
             .IsRequired(true)
@@ -88,20 +84,21 @@ public class BodyMeasurementMap : IEntityTypeConfiguration<BodyMeasurement>
         builder
             .Property(b => b.CreatedAt)
             .IsRequired(true)
-            .HasDefaultValue(DateTime.UtcNow)
-            .HasColumnName("created-at")
+            .HasDefaultValueSql("GETUTCDATE()")
+            .HasColumnName("created_at")
             .HasColumnType("datetime2");
 
         builder
             .Property(b => b.UpdatedAt)
             .IsRequired(true)
-            .HasDefaultValue(DateTime.UtcNow)
-            .HasColumnName("updated-at")
+            .HasDefaultValueSql("GETUTCDATE()")
+            .HasColumnName("updated_at")
             .HasColumnType("datetime2");
 
         builder
             .HasOne(b => b.User)
             .WithMany(u => u.BodyMeasurements)
-            .HasForeignKey(b => b.UserId);
+            .HasForeignKey(b => b.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
