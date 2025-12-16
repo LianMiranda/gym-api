@@ -24,7 +24,7 @@ public class WorkoutPlanRepository(AppDbContext context) : IWorkoutPlanRepositor
         _context.WorkoutPlans.Remove(workoutPlan);
     }
 
-    public async Task<WorkoutPlan?> GetById(Guid workoutPlanId)
+    public async Task<WorkoutPlan?> GetByIdAsync(Guid workoutPlanId)
     {
         return await _context.WorkoutPlans
             .AsNoTracking()
