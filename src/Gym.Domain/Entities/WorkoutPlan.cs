@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Gym.Domain.Enums;
 
 namespace Gym.Domain.Entities;
@@ -9,7 +10,7 @@ public class WorkoutPlan : Entity
     public string? Description { get; private set; }
     public sbyte? DaysPerWeek { get; private set; }
     public sbyte? Months { get; private set; }
-    public Goal? Goal { get; set; }
+    public Goal? Goal { get; private set; }
 
     public User User { get; private set; }
     public List<Routine> Routines { get; private set; }
