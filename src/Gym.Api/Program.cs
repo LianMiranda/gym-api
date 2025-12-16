@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using Gym.Api.Filters;
 using Gym.Application.Config;
 using Gym.Domain.Interfaces.Seeds;
@@ -15,7 +16,12 @@ builder.Services.AddOpenApi();
 
 builder.Services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
 
-builder.Services.AddControllers(options => { options.Filters.Add<ValidationResultFilter>(); });
+builder.Services.AddControllers(options => { options.Filters.Add<ValidationResultFilter>(); }).AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(
+        new JsonStringEnumConverter());
+});
+;
 
 var connectionString = builder.Configuration.GetConnectionString("DbConnection");
 
