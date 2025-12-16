@@ -1,4 +1,4 @@
-using System.Security.Claims;
+using Gym.Api.Shared;
 using Gym.Application.Dtos.Auth.Request;
 using Gym.Application.Dtos.User.Request;
 using Gym.Application.Services.Auth;
@@ -10,7 +10,8 @@ namespace Gym.Api.Controllers;
 
 [ApiController]
 [Route("api/auth")]
-public class AuthController(ILogger<AuthController> logger, IAuthService authService) : ControllerBase
+public class AuthController(ILogger<AuthController> logger, IAuthService authService, CurrentUserId currentUserId)
+    : ControllerBase
 {
     [Route("login")]
     [HttpPost]
@@ -64,19 +65,13 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
     public async Task<IActionResult> GetCurrentUserAsync([FromServices] IUserService userService,
         CancellationToken cancellationToken = default)
     {
+        var id = currentUserId.Get();
+
+        if (id == Guid.Empty)
+            return Unauthorized();
+
         try
         {
-            var claim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
-
-            if (claim == null)
-                return Unauthorized();
-
-            if (!Guid.TryParse(claim.Value, out var id))
-            {
-                logger.LogWarning("Invalid user ID format in token: {ClaimValue}", claim.Value);
-                return Unauthorized();
-            }
-
             var result = await userService.GetByIdAsync(id, cancellationToken);
 
             if (!result.IsSuccess)

@@ -1,7 +1,5 @@
-using System.Security.Claims;
-using Gym.Application.Dtos.User.Request;
+using Gym.Api.Shared;
 using Gym.Application.Dtos.WorkoutPlan.Request;
-using Gym.Application.Services.User;
 using Gym.Application.Services.WorkoutPlan;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,13 +9,16 @@ namespace Gym.Api.Controllers;
 [Authorize]
 [Route("api/workout")]
 [ApiController]
-public class WorkoutPlanController(ILogger<WorkoutPlanController> logger, IWorkoutPlanService service) : ControllerBase
+public class WorkoutPlanController(
+    ILogger<WorkoutPlanController> logger,
+    IWorkoutPlanService service,
+    CurrentUserId currentUserId) : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> CreateAsync(CreateWorkoutDto request,
         CancellationToken cancellationToken = default)
     {
-        var id = GetCurrentId();
+        var id = currentUserId.Get();
 
         if (id == Guid.Empty)
             return Unauthorized();
@@ -42,7 +43,7 @@ public class WorkoutPlanController(ILogger<WorkoutPlanController> logger, IWorko
     [HttpGet]
     public async Task<IActionResult> GetByUserIdAsync(CancellationToken cancellationToken = default)
     {
-        var id = GetCurrentId();
+        var id = currentUserId.Get();
 
         if (id == Guid.Empty)
             return Unauthorized();
@@ -112,17 +113,5 @@ public class WorkoutPlanController(ILogger<WorkoutPlanController> logger, IWorko
                 new { message = "An unexpected error occurred" }
             );
         }
-    }
-
-    private Guid GetCurrentId()
-    {
-        var claim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
-
-        if (!Guid.TryParse(claim?.Value, out var id))
-        {
-            logger.LogWarning("Invalid user ID format in token: {ClaimValue}", claim?.Value);
-        }
-
-        return id;
     }
 }

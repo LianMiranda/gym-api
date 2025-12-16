@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json.Serialization;
 using Gym.Api.Filters;
+using Gym.Api.Shared;
 using Gym.Application.Config;
 using Gym.Domain.Interfaces.Seeds;
 using Gym.Infrastructure.Config;
@@ -56,6 +57,8 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<CurrentUserId>();
 
 var app = builder.Build();
 

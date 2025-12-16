@@ -1,4 +1,4 @@
-using System.Security.Claims;
+using Gym.Api.Shared;
 using Gym.Application.Dtos.BodyMeasurement.Request;
 using Gym.Application.Services.BodyMeasurement;
 using Microsoft.AspNetCore.Authorization;
@@ -9,15 +9,20 @@ namespace Gym.Api.Controllers;
 [Authorize]
 [Route("api/user/body")]
 [ApiController]
-public class BodyMeasurementController(ILogger<UsersController> logger, IBodyMeasurementService service)
+public class BodyMeasurementController(
+    ILogger<UsersController> logger,
+    IBodyMeasurementService service,
+    CurrentUserId currentUserId)
     : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> CreateBodyMeasurementAsync(CreateBodyMeasurementRequest request,
         CancellationToken cancellationToken = default)
     {
-        var id = GetCurrentId();
+        var id = currentUserId.Get();
 
+        if (id == Guid.Empty)
+            return Unauthorized();
         try
         {
             request.UserId = id;
@@ -44,8 +49,10 @@ public class BodyMeasurementController(ILogger<UsersController> logger, IBodyMea
         [FromQuery] int take = 20,
         CancellationToken cancellationToken = default)
     {
-        var id = GetCurrentId();
+        var id = currentUserId.Get();
 
+        if (id == Guid.Empty)
+            return Unauthorized();
         try
         {
             var user = await service.GetByUserIdAsync(id, page, take, cancellationToken);
@@ -136,17 +143,5 @@ public class BodyMeasurementController(ILogger<UsersController> logger, IBodyMea
                 new { message = "An unexpected error occurred" }
             );
         }
-    }
-
-    private Guid GetCurrentId()
-    {
-        var claim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
-
-        if (!Guid.TryParse(claim?.Value, out var id))
-        {
-            logger.LogWarning("Invalid user ID format in token: {ClaimValue}", claim?.Value);
-        }
-
-        return id;
     }
 }

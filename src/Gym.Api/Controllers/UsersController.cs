@@ -1,4 +1,4 @@
-using System.Security.Claims;
+using Gym.Api.Shared;
 using Gym.Application.Dtos.User.Request;
 using Gym.Application.Services.User;
 using Microsoft.AspNetCore.Authorization;
@@ -9,7 +9,8 @@ namespace Gym.Api.Controllers;
 [Authorize]
 [Route("api/users")]
 [ApiController]
-public class UsersController(ILogger<UsersController> logger, IUserService service) : ControllerBase
+public class UsersController(ILogger<UsersController> logger, IUserService service, CurrentUserId currentUserId)
+    : ControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> GetAllUsersAsync([FromQuery] int page = 1, [FromQuery] int take = 20,
@@ -62,8 +63,11 @@ public class UsersController(ILogger<UsersController> logger, IUserService servi
     [HttpDelete]
     public async Task<IActionResult> DeleteCurrentUserAsync(CancellationToken cancellationToken = default)
     {
-        var id  = GetCurrentId();
-        
+        var id = currentUserId.Get();
+
+        if (id == Guid.Empty)
+            return Unauthorized();
+
         try
         {
             var result = await service.DeleteAsync(id, cancellationToken);
@@ -88,8 +92,11 @@ public class UsersController(ILogger<UsersController> logger, IUserService servi
     public async Task<IActionResult> UpdateCurrentUserAsync([FromBody] UpdateUserRequest request,
         CancellationToken cancellationToken = default)
     {
-        var id  = GetCurrentId();
-        
+        var id = currentUserId.Get();
+
+        if (id == Guid.Empty)
+            return Unauthorized();
+
         try
         {
             var result = await service.UpdateAsync(id, request, cancellationToken);
@@ -107,17 +114,5 @@ public class UsersController(ILogger<UsersController> logger, IUserService servi
                 new { message = "An unexpected error occurred" }
             );
         }
-    }
-
-    private Guid GetCurrentId()
-    {
-        var claim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
-
-        if (!Guid.TryParse(claim?.Value, out var id))
-        {
-            logger.LogWarning("Invalid user ID format in token: {ClaimValue}", claim?.Value);
-        }
-
-        return id;
     }
 }
