@@ -10,12 +10,12 @@ public static class WorkoutPlanMapper
     {
         return new WorkoutPlanResponseDto
         {
+            Id = wp.Id,
             Name = wp.Name,
             Description = wp.Description,
             DaysPerWeek = wp.DaysPerWeek,
             Months = wp.Months,
             Goal = wp.Goal
-
         };
     }
 

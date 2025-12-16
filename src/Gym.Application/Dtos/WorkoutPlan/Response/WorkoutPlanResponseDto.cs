@@ -4,6 +4,7 @@ namespace Gym.Application.Dtos.WorkoutPlan.Response;
 
 public record WorkoutPlanResponseDto
 {
+    public Guid Id { get; init; }
     public string Name { get; init; } = null!;
     public string? Description { get; init; }
     public sbyte? DaysPerWeek { get; init; }
