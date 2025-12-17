@@ -9,6 +9,7 @@ public static class RoutineMapper
     public static RoutineResponseDto ToDto(this Routine routine)
     {
         return new RoutineResponseDto(
+            routine.Id,
             routine.Name,
             routine.Description,
             routine.ImageUrl,
@@ -16,14 +17,14 @@ public static class RoutineMapper
         );
     }
 
-    public static Routine ToEntity(this CreateRoutineDto dto,  Guid workoutPlanId)
+    public static Routine ToEntity(this CreateRoutineDto dto,  Guid workoutPlanId, sbyte maxOrderIndex)
     {
         return new Routine(
             workoutPlanId,
             dto.Name,
             dto.Description,
             dto.ImageUrl,
-            dto.OrderIndex
+            maxOrderIndex
         );
     }
 }
