@@ -24,11 +24,11 @@ public class WorkoutPlanRepository(AppDbContext context) : IWorkoutPlanRepositor
         _context.WorkoutPlans.Remove(workoutPlan);
     }
 
-    public async Task<WorkoutPlan?> GetByIdAsync(Guid workoutPlanId)
+    public async Task<WorkoutPlan?> GetByIdAsync(Guid workoutPlanId, CancellationToken cancellationToken)
     {
         return await _context.WorkoutPlans
             .AsNoTracking()
-            .SingleOrDefaultAsync(w => w.Id == workoutPlanId);
+            .SingleOrDefaultAsync(w => w.Id == workoutPlanId, cancellationToken);
     }
 
     public async Task<IEnumerable<WorkoutPlan>?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken)

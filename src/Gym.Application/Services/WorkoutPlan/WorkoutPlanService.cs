@@ -30,7 +30,7 @@ public class WorkoutPlanService(
 
     public async Task<Result> UpdateAsync(Guid id, UpdateWorkoutDto request, CancellationToken cancellationToken)
     {
-        var result = await _workoutPlanRepository.GetByIdAsync(id);
+        var result = await _workoutPlanRepository.GetByIdAsync(id, cancellationToken);
 
         if (result == null)
             return Result.Error("Workout Plan not found");
@@ -49,7 +49,7 @@ public class WorkoutPlanService(
 
     public async Task<Result> DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var workoutPlanExists = await _workoutPlanRepository.GetByIdAsync(id);
+        var workoutPlanExists = await _workoutPlanRepository.GetByIdAsync(id, cancellationToken);
 
         if (workoutPlanExists == null)
             return Result.Error("Workout Plan not found");
