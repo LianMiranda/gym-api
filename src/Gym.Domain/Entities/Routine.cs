@@ -6,13 +6,13 @@ public class Routine : Entity
     public string Name { get; private set; }
     public string? Description { get; private set; }
     public string? ImageUrl { get; private set; }
-    public int OrderIndex { get; private set; }
+    public sbyte OrderIndex { get; private set; }
     
     public WorkoutPlan WorkoutPlan { get; private set; }
     public List<RoutineExercise> RoutineExercises { get; private set; }
     public List<WorkoutSession> WorkoutSessions { get; private set; }
 
-    public Routine(Guid workoutPlanId, string name, string? description, string? imageUrl, int orderIndex)
+    public Routine(Guid workoutPlanId, string name, string? description, string? imageUrl, sbyte orderIndex)
     {
         if(workoutPlanId == Guid.Empty)  throw new ArgumentException("WorkoutPlanId cannot be empty", nameof(workoutPlanId)); 
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
@@ -48,7 +48,7 @@ public class Routine : Entity
         RefreshUpdatedAt();
     }
 
-    public void UpdateOrderIndex(int newOrderIndex)
+    public void UpdateOrderIndex(sbyte newOrderIndex)
     {
         if (newOrderIndex < 0)
             throw new ArgumentException("The order index must be equal to or greater than 0.", nameof(newOrderIndex));
