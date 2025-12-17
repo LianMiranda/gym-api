@@ -1,5 +1,6 @@
 using Gym.Application.Services.Auth;
 using Gym.Application.Services.BodyMeasurement;
+using Gym.Application.Services.Routine;
 using Gym.Application.Services.User;
 using Gym.Application.Services.WorkoutPlan;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,7 @@ public static class DependencyInjection
         services.AddTransient<IAuthService, AuthService>();
         services.AddTransient<IBodyMeasurementService, BodyMeasurementService>();
         services.AddTransient<IWorkoutPlanService, WorkoutPlanService>();
+        services.AddTransient<IRoutineService, RoutineService>();
         return services;
     }
 }
