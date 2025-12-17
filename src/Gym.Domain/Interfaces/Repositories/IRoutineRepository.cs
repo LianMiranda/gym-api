@@ -1,6 +1,6 @@
 using Gym.Domain.Entities;
 
-namespace Gym.Domain.Interfaces;
+namespace Gym.Domain.Interfaces.Repositories;
 
 public interface IRoutineRepository
 {
@@ -9,4 +9,5 @@ public interface IRoutineRepository
     void Delete(Routine routine);
     Task<IEnumerable<Routine>?> GetByWorkoutPlanIdAsync(Guid workoutPlanId, CancellationToken cancellationToken);
     Task<Routine?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<sbyte> GetMaxOrderIndexAsync(Guid workoutPlanId, CancellationToken cancellationToken);
 }

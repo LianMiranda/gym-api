@@ -1,5 +1,6 @@
 using Gym.Domain.Entities;
 using Gym.Domain.Interfaces;
+using Gym.Domain.Interfaces.Repositories;
 using Gym.Infrastructure.Database.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,5 +38,13 @@ public class RoutineRepository(AppDbContext context) : IRoutineRepository
     {
         return await context.Routines
             .FirstOrDefaultAsync(routine => routine.Id == id, cancellationToken);
+    }
+
+    public async Task<sbyte> GetMaxOrderIndexAsync(Guid workoutPlanId, CancellationToken cancellationToken)
+    {
+        return await context.Routines
+            .Where(routine => routine.WorkoutPlanId == workoutPlanId)
+            .Select(r => (sbyte?)r.OrderIndex)
+            .MaxAsync(cancellationToken) ?? -1;
     }
 }

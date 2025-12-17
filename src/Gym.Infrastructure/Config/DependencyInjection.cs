@@ -23,6 +23,7 @@ public static class DependencyInjection
         services.AddTransient<IBodyMeasurementRepository, BodyMeasurementRepository>();
         services.AddTransient<IExerciseSeeder, ExerciseSeeder>();
         services.AddTransient<IWorkoutPlanRepository, WorkoutPlanRepository>();
+        services.AddTransient<IRoutineRepository, RoutineRepository>();
         return services;
     }
 }
