@@ -8,7 +8,7 @@ public class RoutineExercise : Entity
     public string? Notes { get; private set; }
 
     public Routine Routine { get; private set; }
-    public Exercise Exercise { get; private set; }
+    public Exercise Exercise { get; set; }
     public List<ExerciseSet> Sets { get; set; }
 
 
@@ -30,7 +30,7 @@ public class RoutineExercise : Entity
         if (newOrderIndex < 0)
             throw new ArgumentException("The order index must be equal to or greater than 0.", nameof(newOrderIndex));
 
-        this.OrderIndex = newOrderIndex;
+        OrderIndex = newOrderIndex;
         RefreshUpdatedAt();
     }
 
@@ -38,7 +38,13 @@ public class RoutineExercise : Entity
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(newNotes);
 
-        this.Notes = newNotes.Trim();
+        Notes = newNotes.Trim();
+        RefreshUpdatedAt();
+    }
+
+    public void AddSet(ExerciseSet set)
+    {
+        Sets.Add(set);
         RefreshUpdatedAt();
     }
 }
