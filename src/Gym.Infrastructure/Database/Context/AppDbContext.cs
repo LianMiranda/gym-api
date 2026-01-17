@@ -14,6 +14,7 @@ public class AppDbContext : DbContext
     public DbSet<Exercise> Exercises { get; private set; } = null!;
     public DbSet<WorkoutPlan> WorkoutPlans { get; private set; } = null!;
     public DbSet<Routine> Routines { get; private set; } = null!;
+    public DbSet<RoutineExercise> RoutineExercises { get; private set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

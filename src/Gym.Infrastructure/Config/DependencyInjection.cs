@@ -24,6 +24,7 @@ public static class DependencyInjection
         services.AddTransient<IExerciseSeeder, ExerciseSeeder>();
         services.AddTransient<IWorkoutPlanRepository, WorkoutPlanRepository>();
         services.AddTransient<IRoutineRepository, RoutineRepository>();
+        services.AddTransient<IRoutineExerciseRepository, RoutineExerciseRepository>();
         return services;
     }
 }
