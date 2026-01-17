@@ -16,27 +16,33 @@ public class BodyMeasurementController(
     : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateBodyMeasurementAsync(CreateBodyMeasurementRequest request,
+    public async Task<IActionResult> CreateBodyMeasurementAsync(
+        CreateBodyMeasurementRequest request,
         CancellationToken cancellationToken = default)
     {
         var id = currentUserId.Get();
 
         if (id == Guid.Empty)
             return Unauthorized();
+
         try
         {
             request.UserId = id;
 
-            var user = await service.CreateAsync(request, cancellationToken);
+            var result = await service.CreateAsync(request, cancellationToken);
 
-            if (!user.IsSuccess)
-                return NotFound(user);
-
-            return Ok(user);
+            if (!result.IsSuccess)
+                return NotFound(result);
+            
+            return Ok(result);
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Unexpected error while searching for body measurements.");
+            logger.LogError(
+                e,
+                "Unexpected error while creating body measurement for UserId {UserId}.",
+                id);
+
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { message = "An unexpected error occurred" }
@@ -45,7 +51,8 @@ public class BodyMeasurementController(
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetBodyMeasurementByUserIdAsync([FromQuery] int page = 1,
+    public async Task<IActionResult> GetBodyMeasurementByUserIdAsync(
+        [FromQuery] int page = 1,
         [FromQuery] int take = 20,
         CancellationToken cancellationToken = default)
     {
@@ -53,18 +60,24 @@ public class BodyMeasurementController(
 
         if (id == Guid.Empty)
             return Unauthorized();
+
         try
         {
-            var user = await service.GetByUserIdAsync(id, page, take, cancellationToken);
+            var result = await service.GetByUserIdAsync(id, page, take, cancellationToken);
 
-            if (!user.IsSuccess)
-                return NotFound(user);
+            if (!result.IsSuccess)
+                return NotFound(result);
 
-            return Ok(user);
+
+            return Ok(result);
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Unexpected error while searching for body measurements.");
+            logger.LogError(
+                e,
+                "Unexpected error while retrieving body measurements for UserId {UserId}.",
+                id);
+
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { message = "An unexpected error occurred" }
@@ -74,7 +87,8 @@ public class BodyMeasurementController(
 
     [Route("{id}")]
     [HttpGet]
-    public async Task<IActionResult> GetBodyMeasurementByIdAsync([FromRoute] Guid id,
+    public async Task<IActionResult> GetBodyMeasurementByIdAsync(
+        [FromRoute] Guid id,
         CancellationToken cancellationToken = default)
     {
         try
@@ -84,11 +98,16 @@ public class BodyMeasurementController(
             if (!result.IsSuccess)
                 return NotFound(result);
 
+
             return Ok(result);
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Unexpected error while searching for user {UserId}", id);
+            logger.LogError(
+                e,
+                "Unexpected error while retrieving body measurement with Id {BodyMeasurementId}.",
+                id);
+
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { message = "An unexpected error occurred" }
@@ -98,7 +117,8 @@ public class BodyMeasurementController(
 
     [Route("{id}")]
     [HttpDelete]
-    public async Task<IActionResult> DeleteBodyMeasurementAsync([FromRoute] Guid id,
+    public async Task<IActionResult> DeleteBodyMeasurementAsync(
+        [FromRoute] Guid id,
         CancellationToken cancellationToken = default)
     {
         try
@@ -107,12 +127,16 @@ public class BodyMeasurementController(
 
             if (!result.IsSuccess)
                 return NotFound(result);
-
+            
             return NoContent();
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Unexpected error while deleting user {UserId}", id);
+            logger.LogError(
+                e,
+                "Unexpected error while deleting body measurement with Id {BodyMeasurementId}.",
+                id);
+
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { message = "An unexpected error occurred" }
@@ -122,7 +146,8 @@ public class BodyMeasurementController(
 
     [Route("{id}")]
     [HttpPatch]
-    public async Task<IActionResult> UpdateBodyMeasurementAsync([FromRoute] Guid id,
+    public async Task<IActionResult> UpdateBodyMeasurementAsync(
+        [FromRoute] Guid id,
         [FromBody] UpdateBodyMeasurementRequest request,
         CancellationToken cancellationToken = default)
     {
@@ -133,11 +158,16 @@ public class BodyMeasurementController(
             if (!result.IsSuccess)
                 return NotFound(result);
 
+
             return NoContent();
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Unexpected error while update user {UserId}", id);
+            logger.LogError(
+                e,
+                "Unexpected error while updating body measurement with Id {BodyMeasurementId}.",
+                id);
+
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { message = "An unexpected error occurred" }

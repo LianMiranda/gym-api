@@ -15,7 +15,8 @@ public class WorkoutPlanController(
     CurrentUserId currentUserId) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateAsync(CreateWorkoutDto request,
+    public async Task<IActionResult> CreateAsync(
+        CreateWorkoutDto request,
         CancellationToken cancellationToken = default)
     {
         var id = currentUserId.Get();
@@ -32,7 +33,11 @@ public class WorkoutPlanController(
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Unexpected error while creating user.");
+            logger.LogError(
+                e,
+                "Unexpected error while creating workout plan for UserId {UserId}.",
+                id);
+
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { message = "An unexpected error occurred" }
@@ -41,7 +46,8 @@ public class WorkoutPlanController(
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetByUserIdAsync(CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetByUserIdAsync(
+        CancellationToken cancellationToken = default)
     {
         var id = currentUserId.Get();
 
@@ -50,16 +56,20 @@ public class WorkoutPlanController(
 
         try
         {
-            var user = await service.GetByUserIdAsync(id, cancellationToken);
+            var result = await service.GetByUserIdAsync(id, cancellationToken);
 
-            if (!user.IsSuccess)
-                return NotFound(user);
+            if (!result.IsSuccess)
+                return NotFound(result);
 
-            return Ok(user);
+            return Ok(result);
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Unexpected error while searching for users.");
+            logger.LogError(
+                e,
+                "Unexpected error while retrieving workout plans for UserId {UserId}.",
+                id);
+
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { message = "An unexpected error occurred" }
@@ -69,7 +79,8 @@ public class WorkoutPlanController(
 
     [Route("{id}")]
     [HttpDelete]
-    public async Task<IActionResult> DeleteWorkoutPlanAsync([FromRoute] Guid id,
+    public async Task<IActionResult> DeleteWorkoutPlanAsync(
+        [FromRoute] Guid id,
         CancellationToken cancellationToken = default)
     {
         try
@@ -83,7 +94,11 @@ public class WorkoutPlanController(
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Unexpected error while deleting user {UserId}", id);
+            logger.LogError(
+                e,
+                "Unexpected error while deleting workout plan with Id {WorkoutPlanId}.",
+                id);
+
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { message = "An unexpected error occurred" }
@@ -93,7 +108,9 @@ public class WorkoutPlanController(
 
     [Route("{id}")]
     [HttpPatch]
-    public async Task<IActionResult> UpdateWorkoutPlanAsync([FromRoute] Guid id, [FromBody] UpdateWorkoutDto request,
+    public async Task<IActionResult> UpdateWorkoutPlanAsync(
+        [FromRoute] Guid id,
+        [FromBody] UpdateWorkoutDto request,
         CancellationToken cancellationToken = default)
     {
         try
@@ -102,12 +119,16 @@ public class WorkoutPlanController(
 
             if (!result.IsSuccess)
                 return NotFound(result);
-
+            
             return NoContent();
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Unexpected error while update user {UserId}", id);
+            logger.LogError(
+                e,
+                "Unexpected error while updating workout plan with Id {WorkoutPlanId}.",
+                id);
+
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { message = "An unexpected error occurred" }

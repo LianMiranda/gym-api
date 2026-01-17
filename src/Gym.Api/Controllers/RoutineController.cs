@@ -1,8 +1,5 @@
-using Gym.Api.Shared;
 using Gym.Application.Dtos.Routine.Request;
-using Gym.Application.Dtos.WorkoutPlan.Request;
 using Gym.Application.Services.Routine;
-using Gym.Application.Services.WorkoutPlan;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +15,7 @@ public class RoutineController(
     [Route("{workoutPlanId}")]
     [HttpPost]
     public async Task<IActionResult> CreateAsync(
-        [FromRoute] Guid workoutPlanId, 
+        [FromRoute] Guid workoutPlanId,
         [FromBody] CreateRoutineDto request,
         CancellationToken cancellationToken = default)
     {
@@ -30,7 +27,11 @@ public class RoutineController(
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Unexpected error while creating user.");
+            logger.LogError(
+                e,
+                "Unexpected error while creating routine for WorkoutPlanId {WorkoutPlanId}.",
+                workoutPlanId);
+
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { message = "An unexpected error occurred" }
@@ -40,20 +41,26 @@ public class RoutineController(
 
     [Route("workout/{workoutPlanId}")]
     [HttpGet]
-    public async Task<IActionResult> GetByWorkoutPlanIdAsync([FromRoute] Guid workoutPlanId, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetByWorkoutPlanIdAsync(
+        [FromRoute] Guid workoutPlanId,
+        CancellationToken cancellationToken = default)
     {
         try
         {
-            var user = await service.GetByWorkoutPlanIdAsync(workoutPlanId, cancellationToken);
+            var result = await service.GetByWorkoutPlanIdAsync(workoutPlanId, cancellationToken);
 
-            if (!user.IsSuccess)
-                return NotFound(user);
+            if (!result.IsSuccess)
+                return NotFound(result);
 
-            return Ok(user);
+            return Ok(result);
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Unexpected error while searching for users.");
+            logger.LogError(
+                e,
+                "Unexpected error while retrieving routines for WorkoutPlanId {WorkoutPlanId}.",
+                workoutPlanId);
+
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { message = "An unexpected error occurred" }
@@ -63,30 +70,37 @@ public class RoutineController(
 
     [Route("{id}")]
     [HttpGet]
-    public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetByIdAsync(
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken = default)
     {
         try
         {
-            var user = await service.GetByIdAsync(id, cancellationToken);
+            var result = await service.GetByIdAsync(id, cancellationToken);
 
-            if (!user.IsSuccess)
-                return NotFound(user);
+            if (!result.IsSuccess)
+                return NotFound(result);
 
-            return Ok(user);
+            return Ok(result);
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Unexpected error while searching for users.");
+            logger.LogError(
+                e,
+                "Unexpected error while retrieving routine with Id {RoutineId}.",
+                id);
+
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { message = "An unexpected error occurred" }
             );
         }
     }
-    
+
     [Route("{id}")]
     [HttpDelete]
-    public async Task<IActionResult> DeleteRoutineAsync([FromRoute] Guid id,
+    public async Task<IActionResult> DeleteRoutineAsync(
+        [FromRoute] Guid id,
         CancellationToken cancellationToken = default)
     {
         try
@@ -100,7 +114,11 @@ public class RoutineController(
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Unexpected error while deleting user {UserId}", id);
+            logger.LogError(
+                e,
+                "Unexpected error while deleting routine with Id {RoutineId}.",
+                id);
+
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { message = "An unexpected error occurred" }
@@ -110,7 +128,9 @@ public class RoutineController(
 
     [Route("{id}")]
     [HttpPatch]
-    public async Task<IActionResult> UpdateRoutineAsync([FromRoute] Guid id, [FromBody] UpdateRoutineDto request,
+    public async Task<IActionResult> UpdateRoutineAsync(
+        [FromRoute] Guid id,
+        [FromBody] UpdateRoutineDto request,
         CancellationToken cancellationToken = default)
     {
         try
@@ -124,7 +144,11 @@ public class RoutineController(
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Unexpected error while update user {UserId}", id);
+            logger.LogError(
+                e,
+                "Unexpected error while updating routine with Id {RoutineId}.",
+                id);
+
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { message = "An unexpected error occurred" }
