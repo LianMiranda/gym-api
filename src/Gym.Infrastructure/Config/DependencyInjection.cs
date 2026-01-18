@@ -25,6 +25,7 @@ public static class DependencyInjection
         services.AddTransient<IWorkoutPlanRepository, WorkoutPlanRepository>();
         services.AddTransient<IRoutineRepository, RoutineRepository>();
         services.AddTransient<IRoutineExerciseRepository, RoutineExerciseRepository>();
+        services.AddTransient<IExerciseRepository, ExerciseRepository>();
         return services;
     }
 }
